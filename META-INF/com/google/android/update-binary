@@ -29,8 +29,8 @@ if [ $? -ne 0 ] || [ ! -f kernel ]; then
   echo failed to extract current kernel... aborting >> /tmp/nt33672a_truly.log
   print_log
   exit 1
-rm -f dtb
 fi
+rm -f dtb
 
 cd ../new
 if [ -f ../boot.img ]; then
