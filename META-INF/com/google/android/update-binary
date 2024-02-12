@@ -1,0 +1,69 @@
+#!/sbin/sh
+
+export FD=$2
+
+rm -rf /tmp/nt33672a_truly
+rm -f /tmp/nt33672a_truly.log
+mkdir /tmp/nt33672a_truly
+cd /tmp/nt33672a_truly
+unzip "$3"
+mkdir new
+mkdir original
+echo " " >> /tmp/nt33672a_truly.log
+echo " " >> /tmp/nt33672a_truly.log
+
+print_log() {
+  IFS_BAK=$IFS
+  IFS=$'\n'
+  output=`cat /tmp/nt33672a_truly.log`
+  for line in $output; do
+   echo "ui_print $line
+       ui_print" >> /proc/self/fd/$FD
+  done
+  IFS=$IFS_BAK
+}
+
+cd original
+../tools/magiskboot unpack /dev/block/by-name/boot >> /tmp/nt33672a_truly.log 2>&1
+if [ $? -ne 0 ] || [ ! -f kernel ]; then
+  echo failed to extract current kernel... aborting >> /tmp/nt33672a_truly.log
+  print_log
+  exit 1
+rm -f dtb
+fi
+
+cd ../new
+if [ -f ../boot.img ]; then
+  ../tools/magiskboot unpack ../boot.img >> /tmp/nt33672a_truly.log 2>&1
+  if [ $? -ne 0 ] || [ ! -f dtb ]; then
+    echo failed to extract provided boot.img... aborting >> /tmp/nt33672a_truly.log
+    print_log
+    exit 1
+  fi
+  rm -f kernel
+  rm -f ramdisk*
+  rm -f ../boot.img
+else
+  mv ../dtb.img dtb
+fi
+mv ../original/kernel .
+mv ../original/ramdisk* .
+../tools/magiskboot repack /dev/block/by-name/boot ../boot-new.img >> /tmp/nt33672a_truly.log 2>&1
+if [ $? -ne 0 ] || [ ! -f ../boot-new.img ]; then
+  echo failed to repack boot image... aborting >> /tmp/nt33672a_truly.log
+  print_log
+  exit 1
+fi
+
+cd ..
+tools/busybox dd if=boot-new.img of=/dev/block/by-name/boot >> /tmp/nt33672a_truly.log 2>&1
+tools/busybox dd if=dtbo.img of=/dev/block/by-name/dtbo >> /tmp/nt33672a_truly.log 2>&1
+
+echo " " >> /tmp/nt33672a_truly.log 2>&1
+echo done... >> /tmp/nt33672a_truly.log 2>&1
+echo " " >> /tmp/nt33672a_truly.log 2>&1
+print_log
+
+rm -rf /tmp/nt33672a_truly
+
+exit 0
