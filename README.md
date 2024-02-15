@@ -6,3 +6,4 @@ A little script to replace dtb/o with stock MIUI_12.5.8_Global blobs while retai
 - This may become obsolete at any time.
 
 You can use your own favourite dtb/o version by (re)placing boot.img and dtbo.img in the root of the zip file. 
+Format data is recommended.
