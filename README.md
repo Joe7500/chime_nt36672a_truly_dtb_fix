@@ -2,7 +2,7 @@
 
 A little script to replace dtb with stock MIUI 12.5.8 blobs while retaining currently installed kernel. Fixes black screen on boot with NT36672a Truly V2 panel (maybe also macro camera).
 
-Fkash tihs immediately after faulty ROM or kernel.
+Flash tihs immediately after faulty ROM or kernel.
 
 This may become obsolete at any time.
 
