@@ -5,6 +5,6 @@ A little script to replace dtb/o with stock MIUI_12.5.8_Global blobs while retai
 - Flash this immediately after flashing a faulty ROM or kernel.
 - This may become obsolete at any time.
 
-Format data is recommended.
+"Format data" is recommended.
 
 You can use your own favourite dtb/o version by (re)placing boot.img and dtbo.img in the root of the zip file. 
